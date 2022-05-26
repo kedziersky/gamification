@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
+    "@tailwindcss/typography": "^0.5.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,9 +14,21 @@
     "@types/node": "^17.0.35",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
+    "compressorjs": "^1.1.1",
+    "constate": "^3.3.2",
+    "daisyui": "^2.15.0",
+    "firebase": "^9.8.1",
+    "photoswipe": "^5.2.7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-firebase-hooks": "^5.0.3",
+    "react-hook-form": "^7.31.2",
+    "react-photoswipe-gallery": "^2.2.1",
+    "react-query": "^3.39.0",
+    "react-router-dom": "6",
     "react-scripts": "5.0.1",
+    "react-tabs": "^5.1.0",
+    "react-toastify": "^9.0.1",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.3",
@@ -51,5 +67,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.28.13",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "ramda": "^0.28.0",
+    "tailwindcss": "^3.0.24"
   }
 }

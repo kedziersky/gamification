@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 10rem);
+}
+.wrapper {
+  height: 60px;
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.left,
+.right {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: rgb(194, 208, 234);
+  animation: pulse 1.4s linear infinite;
+}
+.right {
+  animation-delay: 0.7s;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
