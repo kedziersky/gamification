@@ -20,7 +20,7 @@ export const SubmittedActivitiesComponent = () => {
     navigate(`/submissions/${id}`);
   };
   const [value, loading, error] = useCollection(
-    query(submissionssRef, orderBy("date", "desc"))
+    query(submissionssRef, orderBy("createdOnDate", "desc"))
   );
 
   if (loading) return <Loader />;
