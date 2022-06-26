@@ -1,19 +1,15 @@
-import { getAuth } from "firebase/auth";
 import { collection, orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../hooks/useUser";
 import { db } from "../../services/firebase";
 import { Loader } from "../loader";
 import { SubmittedActivitiesItem } from "./submittedActivitiesItem";
 
 export const SubmittedActivitiesComponent = () => {
-  const { currentUser } = getAuth();
+  const { user } = useUserContext();
 
-  const submissionssRef = collection(
-    db,
-    "users",
-    `${currentUser!.uid}/submissions`
-  );
+  const submissionssRef = collection(db, "users", `${user.userId}/submissions`);
   const navigate = useNavigate();
 
   const handleNavigation = (id: string) => {
