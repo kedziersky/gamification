@@ -1,5 +1,8 @@
 import constate from "constate";
-import { useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../services/firebase";
 
 type UserState = {
   availablePoints: number;
@@ -9,9 +12,33 @@ type UserState = {
 };
 
 function useUser() {
-  const [user, setUser] = useState<UserState>();
+  const [user, setUser] = useState<any>();
+  const [isPending, setIsPending] = useState<any>();
+
   const addUserData = (data: any) => setUser(data);
-  return { user, addUserData };
+
+  const getUserData = async (currentUser: any) => {
+    if (currentUser) {
+      try {
+        const usersRef = doc(db, "users", currentUser.uid);
+        const response = await getDoc(usersRef);
+
+        setUser(response.data());
+      } catch (e) {}
+    }
+    setIsPending(false);
+  };
+  useEffect(() => {
+    setIsPending(true);
+    const unsubscribe = onAuthStateChanged(getAuth(), getUserData);
+    return () => unsubscribe();
+  }, []);
+
+  const resetUser = () => {
+    setUser(null);
+  };
+
+  return { user, addUserData, resetUser, isPending };
 }
 
 export const [UserProvider, useUserContext] = constate(useUser);

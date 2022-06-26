@@ -1,7 +1,15 @@
 import { faBolt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getAuth } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+
+import {
+  collection,
+  deleteDoc,
+  doc,
+  setDoc,
+  where,
+  query,
+  getDocs,
+} from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
@@ -9,7 +17,7 @@ import { useUploadFile } from "react-firebase-hooks/storage";
 
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+
 import { BackNavigation } from "../../../components/backNavgation";
 import { DetailsItemComponent } from "../../../components/detailsItem/detailsItem.component";
 import { Loader } from "../../../components/loader";
@@ -21,10 +29,34 @@ import Compressor from "compressorjs";
 
 export const ActivityDetailsComponent = () => {
   const navigate = useNavigate();
+  const [submissionLimit, setSubmissionLimit] = useState(0);
   const { id } = useParams();
+
+  const { user } = useUserContext();
 
   const [value, loading, error] = useDocument(doc(db, "activities", id!));
   const submissionsRef = collection(db, "submissions");
+  const activity = value?.data();
+
+  if (activity?.submissionLimit) {
+    const q = query(
+      submissionsRef,
+      where("activityId", "==", id),
+      where("status", "!=", "rejected")
+    );
+
+    const querySnapshot = async () => {
+      try {
+        const response = await getDocs(q);
+
+        setSubmissionLimit(response.docs.length);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    querySnapshot();
+  }
+
   const [uploadFile, uploading, snapshot, errorUpload] = useUploadFile();
 
   const {
@@ -33,40 +65,61 @@ export const ActivityDetailsComponent = () => {
     formState: { errors },
   } = useForm();
 
-  const { currentUser } = getAuth();
-  const activity = value?.data();
-
   const onSubmit = async (data: any) => {
     let url = null;
+
     try {
-      /*  if (data.image) {
+      const currentDate = new Date();
+      const timestamp = currentDate.getTime();
+      if (data?.image.length) {
         const time = Date.now();
         const file = data.image[0];
         new Compressor(file, {
-          quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+          quality: 0.8,
           success: async (compressedResult) => {
-            console.log(compressedResult);
-            const storageRef = ref(storage, `submissions/${file.name}-${time}`);
-            const result = await uploadFile(storageRef, compressedResult);
+            const storageRef = ref(
+              storage,
+              `/submissions/${file.name}-${time}`
+            );
+
+            const result = await uploadFile(storageRef, compressedResult, {
+              contentType: "image/png",
+            });
+
             if (result) {
               url = await getDownloadURL(result.ref);
-
-              console.log("RESULT", { result, url });
+              await setDoc(doc(submissionsRef), {
+                userName: user?.userName,
+                userId: user?.userId,
+                solution: data.solution,
+                attachment: url,
+                status: "pending",
+                activityId: id,
+                createdOnDate: timestamp,
+                acceptedOnDate: null,
+                rejectedOnDate: null,
+                ...activity,
+              });
             }
           },
+          error: (e) => console.log(e),
         });
-      } */
-      await setDoc(doc(submissionsRef), {
-        userName: currentUser?.displayName,
-        userId: currentUser?.uid,
-        solution: data.solution,
-        attachment: url,
-        status: "pending",
-        activityId: id,
-        date: Date.now(),
-        ...activity,
-      });
+      }
 
+      if (!data?.image.length) {
+        await setDoc(doc(submissionsRef), {
+          userName: user?.userName,
+          userId: user?.userId,
+          solution: data.solution,
+          attachment: null,
+          status: "pending",
+          activityId: id,
+          createdOnDate: timestamp,
+          acceptedOnDate: null,
+          rejectedOnDate: null,
+          ...activity,
+        });
+      }
       triggerToast(
         "The submission was successful!",
         "success",
@@ -78,22 +131,52 @@ export const ActivityDetailsComponent = () => {
       triggerToast("Some error occured during the submission.", "error", "😢");
     }
   };
-
-  if (loading) return <Loader />;
-
-  return (
-    <div>
-      <BackNavigation />
-      <ScreenHeader title="Activity Details" />
-      <DetailsItemComponent label="Name" text={activity?.name} />
-      <DetailsItemComponent label="Description" text={activity?.description} />
-      <DetailsItemComponent label="Points" text={activity?.points} />
-
+  const handleRemove = () => {
+    deleteDoc(doc(db, "activities", id!));
+    navigate("/");
+  };
+  const renderButton = () => {
+    if (user.role === "admin") {
+      return (
+        <label
+          htmlFor="my-modal-4"
+          className="btn w-full modal-button bg-error text-black"
+        >
+          Remove activity
+        </label>
+      );
+    }
+    if (submissionLimit >= activity?.submissionLimit) {
+      return <p>You've reached the submission limit!</p>;
+    }
+    return (
       <label htmlFor="my-modal-4" className="btn modal-button w-full">
         Submit activity
       </label>
+    );
+  };
 
-      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+  const renderModal = () => {
+    if (user.role === "admin") {
+      return (
+        <label htmlFor="my-modal-4" className="modal cursor-pointer">
+          <label className="modal-box relative flex flex-col " htmlFor="">
+            <h3 className="text-lg font-bold">
+              You're about to remove the Actvity!
+            </h3>
+            <p>Are you sure you want to do that?</p>
+
+            <button
+              className="btn bg-error w-full text-black mt-10"
+              onClick={handleRemove}
+            >
+              Remove!
+            </button>
+          </label>
+        </label>
+      );
+    }
+    return (
       <label htmlFor="my-modal-4" className="modal cursor-pointer">
         <label className="modal-box relative flex flex-col " htmlFor="">
           <h3 className="text-lg font-bold">
@@ -112,16 +195,38 @@ export const ActivityDetailsComponent = () => {
             />
             <input
               type="file"
-              accept="image/*"
+              accept="image/png,image/jpeg"
               className="mb-5"
               {...register("image")}
             />
+
             <button className="btn w-full" type="submit">
               Submit
             </button>
           </form>
         </label>
       </label>
+    );
+  };
+
+  if (loading) return <Loader />;
+
+  return (
+    <div>
+      <BackNavigation />
+      <ScreenHeader title="Activity Details" />
+      <DetailsItemComponent label="Name" text={activity?.name} />
+      <DetailsItemComponent label="Description" text={activity?.description} />
+      <DetailsItemComponent label="Points" text={activity?.points} />
+      <DetailsItemComponent
+        label="Submission limit"
+        text={activity?.submissionLimit}
+      />
+
+      {renderButton()}
+
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      {renderModal()}
     </div>
   );
 };

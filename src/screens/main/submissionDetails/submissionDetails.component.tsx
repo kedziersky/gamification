@@ -1,7 +1,7 @@
 import { faBolt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doc, updateDoc } from "firebase/firestore";
-import { useDocument, useDocumentData } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { BackNavigation } from "../../../components/backNavgation";
@@ -24,7 +24,11 @@ export const SubmissionDetailsComponent = () => {
 
   const handleAccept = async () => {
     try {
-      await updateDoc(submissionRef, { status: "accepted" });
+      await updateDoc(submissionRef, {
+        status: "accepted",
+        acceptedOnDate: Date.now(),
+        reviewer: user.userName,
+      });
       triggerToast(
         "The submission was accepted successfuly!",
         "success",
@@ -47,6 +51,8 @@ export const SubmissionDetailsComponent = () => {
       await updateDoc(submissionRef, {
         status: "rejected",
         rejectionMessage: data.rejectMessage,
+        rejectedOnDate: Date.now(),
+        reviewer: user.userName,
       });
       triggerToast(
         "The submission was rejected successfuly!",
@@ -85,7 +91,7 @@ export const SubmissionDetailsComponent = () => {
               <p>Please write an explanation why</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <textarea
-                  className="py-4 text-black-500 mt-5 mb-5 resize-none w-full h-60"
+                  className="p-4 text-black mt-5 mb-5 resize-none w-full h-40"
                   placeholder=""
                   required
                   {...register("rejectMessage", { required: true })}
@@ -105,6 +111,8 @@ export const SubmissionDetailsComponent = () => {
       <>
         <DetailsItem label="Status" />
         <Status status={value?.status} />
+        <div className="mb-3" />
+        <DetailsItem label="Reviewed by" text={value?.reviewer} />
         <div className="mb-3" />
         {value?.rejectionMessage && (
           <DetailsItem

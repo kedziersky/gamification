@@ -1,9 +1,6 @@
-import { collection, query, where } from "firebase/firestore";
+import { collection, orderBy, query, where } from "firebase/firestore";
 import { isEmpty } from "ramda";
-import {
-  useCollection,
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { EmptyList } from "../../../components/emptyList";
 import { ScreenHeader } from "../../../components/screenHeader";
 import { db } from "../../../services/firebase";
@@ -13,9 +10,14 @@ export const OrdersComponent = () => {
   const ordersRef = collection(db, "orders");
 
   const [value, loading, error] = useCollection(
-    query(ordersRef, where("status", "==", "pending"))
+    query(
+      ordersRef,
+      where("status", "==", "pending"),
+      orderBy("createdOnDate", "desc")
+    )
   );
   const orders = value?.docs;
+  console.log(error);
   if (loading) return <progress className="progress w-56" />;
 
   const renderSubmissions = () => {

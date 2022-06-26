@@ -11,14 +11,14 @@ export const UserOrdersComponent = () => {
 
   const ordersRef = collection(db, "users", `${currentUser!.uid}/orders`);
   const navigate = useNavigate();
-  console.log("ref", ordersRef);
+
   const handleNavigation = (id: string) => {
     navigate(`/orders/${id}`);
   };
   const [value, loading, error] = useCollection(
     query(ordersRef, orderBy("orderDate", "desc"))
   );
-  console.log("ORDERS", currentUser?.uid);
+
   if (loading) return <Loader />;
 
   const renderActivities = () => {

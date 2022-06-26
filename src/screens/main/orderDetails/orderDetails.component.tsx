@@ -1,8 +1,8 @@
 import { faBolt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doc, updateDoc } from "firebase/firestore";
-import { useDocument, useDocumentData } from "react-firebase-hooks/firestore";
-import { useForm } from "react-hook-form";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { BackNavigation } from "../../../components/backNavgation";
 import { DetailsItem } from "../../../components/detailsItem";
@@ -22,7 +22,10 @@ export const OrderDetailsComponent = () => {
   const navigate = useNavigate();
   const handleFulfill = async () => {
     try {
-      await updateDoc(submissionRef, { status: "fulfilled" });
+      await updateDoc(submissionRef, {
+        status: "fulfilled",
+        fulfilledOnDate: Date.now(),
+      });
 
       triggerToast(
         "The order was fulfilled successfuly!",
@@ -34,8 +37,33 @@ export const OrderDetailsComponent = () => {
       triggerToast("Some error occurred", "error", false);
     }
   };
-  console.log("user", user);
+
   if (loading) return <Loader />;
+
+  const renderAddress = () => {
+    if (value?.isHomeAddress) {
+      return (
+        <>
+          <DetailsItem
+            label="Please send it to my home address"
+            className="mt-6"
+          />
+          <DetailsItem
+            label="Street and apartment number"
+            text={value?.orderStreet}
+          />
+          <DetailsItem label="City" text={value?.orderCity} />
+          <DetailsItem label="Postcode" text={value?.orderPostcode} />
+          <DetailsItem
+            label="Country"
+            text={value?.orderCountry}
+            className="mb-5"
+          />
+        </>
+      );
+    }
+  };
+
   const renderViewCondition = () => {
     if (user?.role === "admin") {
       return (
@@ -71,7 +99,7 @@ export const OrderDetailsComponent = () => {
           <FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />
         }
       />
-
+      {renderAddress()}
       {renderViewCondition()}
     </div>
   );

@@ -1,14 +1,18 @@
 import { collection, orderBy, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { Loader } from "../../../components/loader";
 import { ScreenHeader } from "../../../components/screenHeader";
+import { useCollectionOnce } from "../../../hooks/useCollectionOnce";
 import { db } from "../../../services/firebase";
 import { LeaderboardItem } from "./leaderboardItem";
 
 export const LeaderboardComponent = () => {
   const usersRef = collection(db, "users");
-  const [value, loading, error] = useCollection(
-    query(usersRef, orderBy("totalPoints", "desc"))
-  );
+  const queryUsers = query(usersRef, orderBy("totalPoints", "desc"));
+  const { value, loading } = useCollectionOnce(queryUsers);
+
+  if (loading) return <Loader />;
+
   const renderLeaderboard = () => {
     return value?.docs.map((item, index) => {
       return (

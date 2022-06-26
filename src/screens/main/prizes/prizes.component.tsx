@@ -1,20 +1,30 @@
 import { getAuth } from "firebase/auth";
-import { collection } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { collection, query, where } from "firebase/firestore";
+
 import { Loader } from "../../../components/loader";
 import { PointsHeader } from "../../../components/pointsHeader";
 import { ScreenHeader } from "../../../components/screenHeader";
 import { TabView } from "../../../components/tabView";
 import { UserOrders } from "../../../components/userOrders";
+import { useCollectionOnce } from "../../../hooks/useCollectionOnce";
+import { useUserContext } from "../../../hooks/useUser";
 import { db } from "../../../services/firebase";
 import { PrizesItem } from "./prizesItem";
 
 export const PrizesComponent = () => {
-  const prizeSRef = collection(db, "prizes");
+  const prizesRef = collection(db, "prizes");
+  const { user } = useUserContext();
   const { currentUser } = getAuth();
+  const availabilityCondition = user?.role === "admin" ? "<=" : "==";
 
-  const [value, loading, error] = useCollection(prizeSRef);
+  const queryPrizes = query(
+    prizesRef,
+    where("isAvailable", availabilityCondition, true)
+  );
+  const { value, loading } = useCollectionOnce(queryPrizes);
+
   const prizes = value?.docs;
+
   if (loading) return <Loader />;
 
   const renderPrizes = () => {

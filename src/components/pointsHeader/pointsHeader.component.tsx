@@ -11,12 +11,15 @@ export const PointsHeaderComponent = ({
   onlyAvailable,
   onlyTotalPoints,
 }: any) => {
-  const [value, loading, error] = useDocumentData(doc(db, "users", uid));
-  console.log(value);
+  const [value, loading] = useDocumentData(doc(db, "users", uid));
+
   if (loading && !isEmpty(value)) return <Loader />;
-  const { totalPoints, availablePoints } = value!;
+  const { totalPoints, availablePoints, role } = value!;
 
   const renderContainer = () => {
+    if (role === "admin") {
+      return <p className="text-primary">You're an admin!</p>;
+    }
     if (onlyAvailable) {
       return (
         <>

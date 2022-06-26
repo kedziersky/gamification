@@ -5,9 +5,10 @@ import { useUserContext } from "../../../hooks/useUser";
 export const SettingsComponent = () => {
   const auth = getAuth();
   const navigate = useNavigate();
-  const { user } = useUserContext();
-  const handleButton = () => {
-    signOut(auth);
+  const { user, resetUser } = useUserContext();
+  const handleButton = async () => {
+    await signOut(auth);
+    resetUser();
     navigate("/signin");
   };
 
@@ -19,6 +20,10 @@ export const SettingsComponent = () => {
     {
       name: "activities",
       url: "/",
+    },
+    {
+      name: "prizes",
+      url: "/prizes",
     },
   ];
 

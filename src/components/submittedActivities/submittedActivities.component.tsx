@@ -1,6 +1,6 @@
 import { getAuth } from "firebase/auth";
-import { collection, doc, orderBy, query, where } from "firebase/firestore";
-import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../services/firebase";
 import { Loader } from "../loader";
@@ -22,11 +22,13 @@ export const SubmittedActivitiesComponent = () => {
   const [value, loading, error] = useCollection(
     query(submissionssRef, orderBy("date", "desc"))
   );
+
   if (loading) return <Loader />;
 
   const renderActivities = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;
+
       return (
         <SubmittedActivitiesItem
           item={item.data()}
@@ -41,7 +43,7 @@ export const SubmittedActivitiesComponent = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto max-h-96">
         <table className="table table-zebra w-full">
           <thead>
             <tr>

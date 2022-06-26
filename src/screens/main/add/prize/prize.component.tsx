@@ -4,8 +4,11 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { useForm } from "react-hook-form";
 import { BackNavigation } from "../../../../components/backNavgation";
 import { ScreenHeader } from "../../../../components/screenHeader";
-import { db } from "../../../../services/firebase";
+import { db, storage } from "../../../../services/firebase";
 import { triggerToast } from "../../../../utils/triggerToast";
+import { getDownloadURL, ref } from "firebase/storage";
+import { useUploadFile } from "react-firebase-hooks/storage";
+import Compressor from "compressorjs";
 
 export const AddPrizeComponent = () => {
   const {
@@ -15,15 +18,40 @@ export const AddPrizeComponent = () => {
     formState: { errors },
   } = useForm();
   const submissionsRef = collection(db, "prizes");
+  const [uploadFile, uploading, snapshot, errorUpload] = useUploadFile();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    delete data.attachment;
+    data.price = parseInt(data.price);
     try {
-      await setDoc(doc(submissionsRef), {
-        date: Date.now(),
-        ...data,
-      });
+      if (data?.attachment.length) {
+        const time = Date.now();
+        const file = data.attachment[0];
+        new Compressor(file, {
+          quality: 0.8,
+          success: async (compressedResult) => {
+            const storageRef = ref(storage, `/prizes/${file.name}-${time}`);
+
+            const result = await uploadFile(storageRef, compressedResult, {
+              contentType: "image/png",
+            });
+
+            if (result) {
+              const url = await getDownloadURL(result.ref);
+              await setDoc(doc(submissionsRef), {
+                ...data,
+                attachment: url,
+              });
+            }
+          },
+          error: (e) => console.log(e),
+        });
+      }
+      if (!data?.attachment.length) {
+        await setDoc(doc(submissionsRef), {
+          createdOnDate: Date.now(),
+          ...data,
+        });
+      }
       triggerToast(
         "You've added the prize successfuly!",
         "success",
@@ -55,7 +83,7 @@ export const AddPrizeComponent = () => {
             <span className="label-text">Price</span>
           </label>
           <input
-            type="text"
+            type="number"
             placeholder="Type here"
             className="input input-bordered w-full"
             {...register("price", { required: true })}
@@ -65,12 +93,12 @@ export const AddPrizeComponent = () => {
           </label>
           <input
             type="file"
-            accept="image/*"
+            accept="image/png,image/jpeg"
             className="w-full"
-            {...register("attachment")}
+            {...register("attachment", { required: true })}
           />
           <label className="label">
-            <span className="label-text">Is is already available?</span>
+            <span className="label-text">Is it already available?</span>
           </label>
           <input
             type="checkbox"

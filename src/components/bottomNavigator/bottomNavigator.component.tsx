@@ -9,7 +9,7 @@ import {
   faShoppingBasket,
   faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
-import { getAuth } from "firebase/auth";
+
 import { useUserContext } from "../../hooks/useUser";
 
 export const BottomNavigatorComponent = () => {

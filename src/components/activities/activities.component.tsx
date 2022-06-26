@@ -1,18 +1,16 @@
-import { useEffect } from "react";
-import { useQuery } from "react-query";
-import { collection, doc } from "firebase/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
 
-import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import { ActivityItem } from "./activityItem";
-import { getAuth } from "firebase/auth";
+
 import { Loader } from "../loader";
+import { useCollectionOnce } from "../../hooks/useCollectionOnce";
 
 export const ActivitiesComponent = () => {
-  const { currentUser } = getAuth();
-
-  const [value, loading, error] = useCollection(collection(db, "activities"));
+  const activitiesRef = collection(db, "activities");
+  const queryActivities = query(activitiesRef, orderBy("points", "desc"));
+  const { value, loading } = useCollectionOnce(queryActivities);
 
   const navigate = useNavigate();
 
@@ -23,6 +21,7 @@ export const ActivitiesComponent = () => {
   const renderActivities = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;
+      console.log("test", item.data());
       return (
         <ActivityItem
           item={item.data()}

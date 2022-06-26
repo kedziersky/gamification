@@ -12,14 +12,19 @@ export const AddActivityComponent = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const watchIsLimited = watch("isLimitedActivity", false);
+
   const submissionsRef = collection(db, "activities");
 
   const onSubmit = async (data: any) => {
+    data.points = parseInt(data.points);
     try {
       await setDoc(doc(submissionsRef), {
-        date: Date.now(),
+        createdDate: Date.now(),
         ...data,
       });
       triggerToast(
@@ -29,7 +34,28 @@ export const AddActivityComponent = () => {
       );
       reset();
     } catch (e) {
+      console.log(e);
       triggerToast("Some error occured during the submission.", "error", "😢");
+    }
+  };
+
+  const renderLimit = () => {
+    if (watchIsLimited) {
+      return (
+        <>
+          <label className="label">
+            <span className="label-text">
+              How many times the activity can be submitted?
+            </span>
+          </label>
+          <input
+            type="number"
+            placeholder="Type here"
+            className="input input-bordered w-full mb-5"
+            {...register("submissionLimit", { required: watchIsLimited })}
+          />
+        </>
+      );
     }
   };
 
@@ -67,13 +93,14 @@ export const AddActivityComponent = () => {
             {...register("points", { required: true })}
           />
           <label className="label">
-            <span className="label-text">Is a one time activity?</span>
+            <span className="label-text">Is a limited activity?</span>
           </label>
           <input
             type="checkbox"
             className="toggle toggle-primary mb-5"
-            {...register("isOneTimeActivity")}
+            {...register("isLimitedActivity")}
           />
+          {renderLimit()}
           <button className="btn">Submit</button>
         </form>
       </div>

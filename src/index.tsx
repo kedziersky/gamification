@@ -1,15 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { QueryClient, QueryClientProvider } from "react-query";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -17,7 +13,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -26,9 +21,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -32,6 +32,7 @@ module.exports = {
           success: "#36D399",
           warning: "#FBBD23",
           error: "#F87272",
+          text: "rgb(194, 208, 234)",
         },
       },
     ],

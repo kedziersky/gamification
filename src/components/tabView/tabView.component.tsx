@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { useUserContext } from "../../hooks/useUser";
 
 export const TabViewComponent = ({ renderView }: any) => {
   const [tabIndex, setTabIndex] = useState(0);
+  const { user } = useUserContext();
 
   const renderTabs = () => {
+    if (user.role === "admin") return null;
     return renderView.map((item: any, index: number) => (
       <Tab
         className={`tab focus:outline-none ${

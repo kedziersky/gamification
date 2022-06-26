@@ -8,6 +8,8 @@ import { firebaseService } from "../../../services";
 import { db } from "../../../services/firebase";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBolt } from "@fortawesome/free-solid-svg-icons";
 
 export const SignInComponent = () => {
   const navigate = useNavigate();
@@ -26,8 +28,15 @@ export const SignInComponent = () => {
   };
 
   return (
-    <div>
-      <button className="bg-red-500" onClick={handleGoogleSignIn}>
+    <div className="h-screen flex flex-col justify-center">
+      <FontAwesomeIcon
+        icon={faBolt}
+        color="#83E933"
+        size="5x"
+        className="mb-8"
+      />
+      <h1 className="text-center text-6xl mb-36 font-bold">Sparky</h1>
+      <button className="btn" onClick={handleGoogleSignIn}>
         Sign in
       </button>
     </div>
