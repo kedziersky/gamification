@@ -26,6 +26,7 @@ import { useUserContext } from "../../../hooks/useUser";
 import { db, storage } from "../../../services/firebase";
 import { triggerToast } from "../../../utils/triggerToast";
 import Compressor from "compressorjs";
+import Zoom from "react-medium-image-zoom";
 
 export const ActivityDetailsComponent = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export const ActivityDetailsComponent = () => {
   const { user } = useUserContext();
 
   const [value, loading, error] = useDocument(doc(db, "activities", id!));
+
   const submissionsRef = collection(db, "submissions");
   const activity = value?.data();
 
@@ -63,7 +65,10 @@ export const ActivityDetailsComponent = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+
+  const watchFile = watch("image", null);
 
   const onSubmit = async (data: any) => {
     let url = null;
@@ -196,11 +201,33 @@ export const ActivityDetailsComponent = () => {
             <input
               type="file"
               accept="image/png,image/jpeg"
-              className="mb-5"
+              className="hidden"
               {...register("image")}
+              name="image"
+              id="image"
             />
-
-            <button className="btn w-full" type="submit">
+            <div className="flex items-center">
+              <label
+                htmlFor="image"
+                className="inline-block mb-7 text-sm text-grey-500
+              mr-5 py-2 px-6
+              rounded-full border-0
+              font-medium
+              bg-accent text-white
+              cursor-pointer w-fit"
+              >
+                Choose a file
+              </label>
+              {watchFile?.length > 0 && (
+                <Zoom>
+                  <img
+                    src={URL.createObjectURL(watchFile[0])}
+                    className="w-24"
+                  />
+                </Zoom>
+              )}
+            </div>
+            <button className="btn w-full mt-5" type="submit">
               Submit
             </button>
           </form>
@@ -218,10 +245,13 @@ export const ActivityDetailsComponent = () => {
       <DetailsItemComponent label="Name" text={activity?.name} />
       <DetailsItemComponent label="Description" text={activity?.description} />
       <DetailsItemComponent label="Points" text={activity?.points} />
-      <DetailsItemComponent
-        label="Submission limit"
-        text={activity?.submissionLimit}
-      />
+
+      {activity?.submissionLimit && (
+        <DetailsItemComponent
+          label="Submission limit"
+          text={activity?.submissionLimit}
+        />
+      )}
 
       {renderButton()}
 

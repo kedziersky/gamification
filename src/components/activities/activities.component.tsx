@@ -21,7 +21,7 @@ export const ActivitiesComponent = () => {
   const renderActivities = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;
-      console.log("test", item.data());
+
       return (
         <ActivityItem
           item={item.data()}

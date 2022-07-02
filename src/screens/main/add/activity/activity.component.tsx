@@ -24,7 +24,7 @@ export const AddActivityComponent = () => {
     data.points = parseInt(data.points);
     try {
       await setDoc(doc(submissionsRef), {
-        createdDate: Date.now(),
+        createdOnDate: Date.now(),
         ...data,
       });
       triggerToast(
