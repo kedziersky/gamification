@@ -3,6 +3,7 @@ import { collection, orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../services/firebase";
+import { EmptyList } from "../emptyList";
 import { Loader } from "../loader";
 import { UserOrdersItem } from "./userOrdersItem";
 
@@ -20,7 +21,7 @@ export const UserOrdersComponent = () => {
   );
 
   if (loading) return <Loader />;
-
+  if (!value?.docs.length) return <EmptyList text="No orders yet 👀" />;
   const renderActivities = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;

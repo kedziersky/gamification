@@ -33,6 +33,7 @@ export const SignInComponent = () => {
     const currentUser = auth.currentUser;
     let profileInfo = {
       totalPoints: 0,
+      seasonPoints: 0,
       availablePoints: 0,
       userName: currentUser?.displayName,
       role: "user",
