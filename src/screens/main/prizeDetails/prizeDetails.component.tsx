@@ -1,43 +1,34 @@
-import { faBolt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getAuth } from "firebase/auth";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getAuth } from 'firebase/auth';
+import { collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import { BackNavigation } from "../../../components/backNavgation";
-import { DetailsItem } from "../../../components/detailsItem";
-import { Loader } from "../../../components/loader";
-import { ScreenHeader } from "../../../components/screenHeader";
-import { db } from "../../../services/firebase";
-import { triggerToast } from "../../../utils/triggerToast";
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BackNavigation } from '../../../components/backNavgation';
+import { DetailsItem } from '../../../components/detailsItem';
+import { Loader } from '../../../components/loader';
+import { ScreenHeader } from '../../../components/screenHeader';
+import { db } from '../../../services/firebase';
+import { triggerToast } from '../../../utils/triggerToast';
 
 export const PrizeDetailsComponent = () => {
   const { id } = useParams();
-  const prizesRef = doc(db, "prizes", id!);
+  const prizesRef = doc(db, 'prizes', id!);
   const { currentUser } = getAuth();
-  const usersRef = doc(db, "users", currentUser!.uid);
-  const ordersRef = doc(collection(db, "orders"));
+  const usersRef = doc(db, 'users', currentUser!.uid);
+  const ordersRef = doc(collection(db, 'orders'));
   const [value, loading, error] = useDocumentData(prizesRef);
   const [user, userLoading, userError] = useDocumentData(usersRef);
 
   const { register, handleSubmit, watch } = useForm();
 
-  const {
-    register: registerEditField,
-    handleSubmit: handleEditSubmit,
-    watch: watchEdit,
-  } = useForm();
+  const { register: registerEditField, handleSubmit: handleEditSubmit, watch: watchEdit } = useForm();
 
-  const watchIsHomeAddress = watch("isHomeAddress", false);
-  const watchIsAvailable = watchEdit("isAvailable");
+  const watchIsHomeAddress = watch('isHomeAddress', false);
+  const watchIsPaczkomat = watch('isPaczkomat', false);
+  const watchIsAvailable = watchEdit('isAvailable');
 
   const navigate = useNavigate();
 
@@ -46,7 +37,7 @@ export const PrizeDetailsComponent = () => {
       prizeId: id,
       prizeName: value?.name,
       price: value?.price,
-      status: "pending",
+      status: 'pending',
       userId: currentUser?.uid,
       userName: currentUser?.displayName,
       createdOnDate: Date.now(),
@@ -55,14 +46,13 @@ export const PrizeDetailsComponent = () => {
       orderPostcode: data?.orderPostcode ?? null,
       orderCountry: data?.orderCountry ?? null,
       isHomeAddress: data?.isHomeAddress,
+      isPaczkomat: data?.isPaczkomat,
+      paczkomatNumber: data?.paczkomatNumber,
+      additionalInfo: data?.additionalInfo,
       fulfilledOnDate: null,
     });
-    triggerToast(
-      "The order was successful!",
-      "success",
-      <FontAwesomeIcon icon={faBolt} color="#83E933" />
-    );
-    navigate("/prizes", { replace: true });
+    triggerToast('The order was successful!', 'success', <FontAwesomeIcon icon={faBolt} color="#83E933" />);
+    navigate('/prizes', { replace: true });
   };
 
   const handleEdit = async (data: any) => {
@@ -70,8 +60,26 @@ export const PrizeDetailsComponent = () => {
   };
 
   const handleRemove = () => {
-    deleteDoc(doc(db, "prizes", id!));
-    navigate("/prizes");
+    deleteDoc(doc(db, 'prizes', id!));
+    navigate('/prizes');
+  };
+
+  const renderPaczkomat = () => {
+    return (
+      <>
+        <label className="label">
+          <span className="label-text">Paczkomat number</span>
+        </label>
+        <input
+          placeholder="Type here"
+          className="input input-bordered w-full"
+          {...register('paczkomatNumber', {
+            required: watchIsPaczkomat,
+            value: null,
+          })}
+        />
+      </>
+    );
   };
 
   const renderAddressFields = () => (
@@ -82,7 +90,7 @@ export const PrizeDetailsComponent = () => {
       <input
         placeholder="Type here"
         className="input input-bordered w-full"
-        {...register("orderStreet", {
+        {...register('orderStreet', {
           required: watchIsHomeAddress,
           value: null,
         })}
@@ -93,7 +101,7 @@ export const PrizeDetailsComponent = () => {
       <input
         placeholder="Type here"
         className="input input-bordered w-full"
-        {...register("orderCity", {
+        {...register('orderCity', {
           required: watchIsHomeAddress,
           value: null,
         })}
@@ -104,7 +112,7 @@ export const PrizeDetailsComponent = () => {
       <input
         placeholder="Type here"
         className="input input-bordered w-full"
-        {...register("orderPostcode", {
+        {...register('orderPostcode', {
           required: watchIsHomeAddress,
           value: null,
         })}
@@ -115,13 +123,13 @@ export const PrizeDetailsComponent = () => {
       <input
         placeholder="Type here"
         className="input input-bordered w-full mb-5"
-        {...register("orderCountry", { required: watchIsHomeAddress })}
+        {...register('orderCountry', { required: watchIsHomeAddress })}
       />
     </>
   );
 
   const renderAdminContent = () => {
-    if (user?.role === "admin") {
+    if (user?.role === 'admin') {
       return (
         <>
           <form onSubmit={handleEditSubmit(handleEdit)}>
@@ -131,7 +139,7 @@ export const PrizeDetailsComponent = () => {
             <input
               type="checkbox"
               className="toggle toggle-primary"
-              {...registerEditField("isAvailable", {
+              {...registerEditField('isAvailable', {
                 value: value?.isAvailable,
               })}
             />
@@ -142,24 +150,16 @@ export const PrizeDetailsComponent = () => {
               Save changes
             </button>
           </form>
-          <label
-            htmlFor="my-modal-4"
-            className="btn w-full modal-button bg-error text-black"
-          >
+          <label htmlFor="my-modal-4" className="btn w-full modal-button bg-error text-black">
             Remove prize
           </label>
           <input type="checkbox" id="my-modal-4" className="modal-toggle" />
           <label htmlFor="my-modal-4" className="modal cursor-pointer">
             <label className="modal-box relative flex flex-col " htmlFor="">
-              <h3 className="text-lg font-bold">
-                You're about to remove the prize!
-              </h3>
+              <h3 className="text-lg font-bold">You're about to remove the prize!</h3>
               <p>Are you sure you want to do that?</p>
 
-              <button
-                className="btn bg-error w-full text-black mt-10"
-                onClick={handleRemove}
-              >
+              <button className="btn bg-error w-full text-black mt-10" onClick={handleRemove}>
                 Remove!
               </button>
             </label>
@@ -170,32 +170,34 @@ export const PrizeDetailsComponent = () => {
 
     return (
       <>
-        <label
-          htmlFor="my-modal-4"
-          className="btn w-full btn-primary modal-button"
-        >
+        <label htmlFor="my-modal-4" className="btn w-full btn-primary modal-button">
           Order prize
         </label>
         <input type="checkbox" id="my-modal-4" className="modal-toggle" />
         <label htmlFor="my-modal-4" className="modal cursor-pointer">
           <label className="modal-box relative flex flex-col " htmlFor="">
-            <h3 className="text-lg font-bold">
-              You're about to order the prize!
-            </h3>
-            <p>
-              Do you want to collect it in the office or send it to your home
-              address?
-            </p>
+            <h3 className="text-lg font-bold">You're about to order the prize!</h3>
+            <p>Do you want to collect it in the office or send it to your home address?</p>
             <form onSubmit={handleSubmit(handleOrder)}>
               <label className="label mt-5">
                 <span className="label-text">Send it to home address</span>
               </label>
-              <input
-                type="checkbox"
-                className="toggle toggle-primary mb-5"
-                {...register("isHomeAddress")}
-              />
+              <input type="checkbox" className="toggle toggle-primary" {...register('isHomeAddress')} />
               {watchIsHomeAddress && renderAddressFields()}
+              <label className="label">
+                <span className="label-text">Send it to Paczkomat</span>
+              </label>
+              <input type="checkbox" className="toggle toggle-primary" {...register('isPaczkomat')} />
+              {watchIsPaczkomat && renderPaczkomat()}
+              <label className="label">
+                <span className="label-text">Additional info</span>
+              </label>
+              <textarea
+                className="p-4 text-black mb-5 resize-none w-full h-40"
+                placeholder=""
+                required
+                {...register('additionalInfo')}
+              />
               <button className={`btn btn-primary w-full mt-3`}>Order</button>
             </form>
           </label>
@@ -205,12 +207,8 @@ export const PrizeDetailsComponent = () => {
   };
 
   const renderOrderCondition = () => {
-    if (user?.role !== "admin" && user?.availablePoints < value?.price) {
-      return (
-        <p className="text-error">
-          You don't have enough points to order this prize
-        </p>
-      );
+    if (user?.role !== 'admin' && user?.availablePoints < value?.price) {
+      return <p className="text-error">You don't have enough points to order this prize</p>;
     }
     return renderAdminContent();
   };
@@ -222,9 +220,8 @@ export const PrizeDetailsComponent = () => {
       <ScreenHeader title="Prize details" />
       <DetailsItem label="Name" text={value?.name} />
       <DetailsItem label="Price" text={value?.price} />
-      {value?.attachment && (
-        <DetailsItem label="Photo" attachmentURL={value?.attachment} />
-      )}
+      {value?.url && <DetailsItem label="Prize URL" text={value?.url} />}
+      {value?.attachment && <DetailsItem label="Photo" attachmentURL={value?.attachment} />}
 
       {renderOrderCondition()}
     </div>

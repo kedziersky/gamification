@@ -1,15 +1,15 @@
-import { collection, orderBy, query } from "firebase/firestore";
+import { collection, orderBy, query } from 'firebase/firestore';
 
-import { db } from "../../services/firebase";
-import { useNavigate } from "react-router-dom";
-import { ActivityItem } from "./activityItem";
+import { db } from '../../services/firebase';
+import { useNavigate } from 'react-router-dom';
+import { ActivityItem } from './activityItem';
 
-import { Loader } from "../loader";
-import { useCollectionOnce } from "../../hooks/useCollectionOnce";
+import { Loader } from '../loader';
+import { useCollectionOnce } from '../../hooks/useCollectionOnce';
 
 export const ActivitiesComponent = () => {
-  const activitiesRef = collection(db, "activities");
-  const queryActivities = query(activitiesRef, orderBy("points", "desc"));
+  const activitiesRef = collection(db, 'activities');
+  const queryActivities = query(activitiesRef, orderBy('points', 'desc'));
   const { value, loading } = useCollectionOnce(queryActivities);
 
   const navigate = useNavigate();
@@ -23,20 +23,14 @@ export const ActivitiesComponent = () => {
       const id = item.id;
 
       return (
-        <ActivityItem
-          item={item.data()}
-          index={index + 1}
-          id={id}
-          handleClick={() => handleNavigation(id)}
-          key={id}
-        />
+        <ActivityItem item={item.data()} index={index + 1} id={id} handleClick={() => handleNavigation(id)} key={id} />
       );
     });
   };
 
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
         <table className="table table-zebra w-full">
           <thead>
             <tr>

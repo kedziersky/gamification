@@ -1,26 +1,23 @@
-import { getAuth } from "firebase/auth";
-import { collection, query, where } from "firebase/firestore";
+import { getAuth } from 'firebase/auth';
+import { collection, query, where } from 'firebase/firestore';
 
-import { Loader } from "../../../components/loader";
-import { PointsHeader } from "../../../components/pointsHeader";
-import { ScreenHeader } from "../../../components/screenHeader";
-import { TabView } from "../../../components/tabView";
-import { UserOrders } from "../../../components/userOrders";
-import { useCollectionOnce } from "../../../hooks/useCollectionOnce";
-import { useUserContext } from "../../../hooks/useUser";
-import { db } from "../../../services/firebase";
-import { PrizesItem } from "./prizesItem";
+import { Loader } from '../../../components/loader';
+import { PointsHeader } from '../../../components/pointsHeader';
+import { ScreenHeader } from '../../../components/screenHeader';
+import { TabView } from '../../../components/tabView';
+import { UserOrders } from '../../../components/userOrders';
+import { useCollectionOnce } from '../../../hooks/useCollectionOnce';
+import { useUserContext } from '../../../hooks/useUser';
+import { db } from '../../../services/firebase';
+import { PrizesItem } from './prizesItem';
 
 export const PrizesComponent = () => {
-  const prizesRef = collection(db, "prizes");
+  const prizesRef = collection(db, 'prizes');
   const { user } = useUserContext();
   const { currentUser } = getAuth();
-  const availabilityCondition = user?.role === "admin" ? "<=" : "==";
+  const availabilityCondition = user?.role === 'admin' ? '<=' : '==';
 
-  const queryPrizes = query(
-    prizesRef,
-    where("isAvailable", availabilityCondition, true)
-  );
+  const queryPrizes = query(prizesRef, where('isAvailable', availabilityCondition, true));
   const { value, loading } = useCollectionOnce(queryPrizes);
 
   const prizes = value?.docs;
@@ -29,22 +26,15 @@ export const PrizesComponent = () => {
 
   const renderPrizes = () => {
     return prizes?.map((item, index) => {
-      return (
-        <PrizesItem
-          item={item.data()}
-          index={index + 1}
-          id={item.id}
-          key={item.id}
-        />
-      );
+      return <PrizesItem item={item.data()} index={index + 1} id={item.id} key={item.id} />;
     });
   };
 
   const renderView = [
     {
-      name: "Available",
+      name: 'Available',
       component: (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
           <table className="table table-zebra w-full">
             <thead>
               <tr>
@@ -59,7 +49,7 @@ export const PrizesComponent = () => {
       ),
     },
     {
-      name: "Ordered",
+      name: 'Ordered',
       component: <UserOrders />,
     },
   ];

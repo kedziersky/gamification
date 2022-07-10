@@ -1,24 +1,22 @@
-import { getAuth } from "firebase/auth";
-import { collection, orderBy, query } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { useNavigate } from "react-router-dom";
-import { db } from "../../services/firebase";
-import { EmptyList } from "../emptyList";
-import { Loader } from "../loader";
-import { UserOrdersItem } from "./userOrdersItem";
+import { getAuth } from 'firebase/auth';
+import { collection, orderBy, query } from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../../services/firebase';
+import { EmptyList } from '../emptyList';
+import { Loader } from '../loader';
+import { UserOrdersItem } from './userOrdersItem';
 
 export const UserOrdersComponent = () => {
   const { currentUser } = getAuth();
 
-  const ordersRef = collection(db, "users", `${currentUser!.uid}/orders`);
+  const ordersRef = collection(db, 'users', `${currentUser!.uid}/orders`);
   const navigate = useNavigate();
 
   const handleNavigation = (id: string) => {
     navigate(`/orders/${id}`);
   };
-  const [value, loading, error] = useCollection(
-    query(ordersRef, orderBy("orderDate", "desc"))
-  );
+  const [value, loading, error] = useCollection(query(ordersRef, orderBy('orderDate', 'desc')));
 
   if (loading) return <Loader />;
   if (!value?.docs.length) return <EmptyList text="No orders yet 👀" />;
@@ -40,7 +38,7 @@ export const UserOrdersComponent = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
         <table className="table table-zebra w-full">
           <thead>
             <tr>

@@ -1,14 +1,14 @@
-import constate from "constate";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { db } from "../services/firebase";
+import constate from 'constate';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { db } from '../services/firebase';
 
 type UserState = {
   availablePoints: number;
   totalPoints: number;
   userName: string;
-  role: "admin" | "user";
+  role: 'admin' | 'user';
 };
 
 function useUser() {
@@ -20,10 +20,10 @@ function useUser() {
   const getUserData = async (currentUser: any) => {
     if (currentUser) {
       try {
-        const usersRef = doc(db, "users", currentUser.uid);
+        const usersRef = doc(db, 'users', currentUser.uid);
         const response = await getDoc(usersRef);
 
-        setUser(response.data());
+        setUser({ ...response.data(), userId: currentUser.uid });
       } catch (e) {}
     }
     setIsPending(false);

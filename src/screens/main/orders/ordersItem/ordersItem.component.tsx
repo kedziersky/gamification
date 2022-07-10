@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export const OrdersItemComponent = ({ item, index, id }: any) => {
-  const date = new Date(item.orderDate);
+  const date = new Date(item.createdOnDate);
   const navigate = useNavigate();
 
   const handleNavigation = () => {
