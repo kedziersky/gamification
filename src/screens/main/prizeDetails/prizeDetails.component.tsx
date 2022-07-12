@@ -47,7 +47,7 @@ export const PrizeDetailsComponent = () => {
       orderCountry: data?.orderCountry ?? null,
       isHomeAddress: data?.isHomeAddress,
       isPaczkomat: data?.isPaczkomat,
-      paczkomatNumber: data?.paczkomatNumber,
+      paczkomatNumber: data?.paczkomatNumber ?? null,
       additionalInfo: data?.additionalInfo,
       fulfilledOnDate: null,
     });
@@ -195,7 +195,6 @@ export const PrizeDetailsComponent = () => {
               <textarea
                 className="p-4 text-black mb-5 resize-none w-full h-40"
                 placeholder=""
-                required
                 {...register('additionalInfo')}
               />
               <button className={`btn btn-primary w-full mt-3`}>Order</button>

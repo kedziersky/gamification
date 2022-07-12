@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import { collection, query, where } from 'firebase/firestore';
+import { collection, orderBy, query, where } from 'firebase/firestore';
 
 import { Loader } from '../../../components/loader';
 import { PointsHeader } from '../../../components/pointsHeader';

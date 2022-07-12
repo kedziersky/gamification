@@ -1,22 +1,16 @@
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../../../hooks/useUser";
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../../hooks/useUser';
 
-import { db } from "../../../services/firebase";
+import { db } from '../../../services/firebase';
 
-import { useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBolt } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
 
-import { triggerToast } from "../../../utils/triggerToast";
+import { triggerToast } from '../../../utils/triggerToast';
 
 export const SignInComponent = () => {
   const navigate = useNavigate();
@@ -26,28 +20,32 @@ export const SignInComponent = () => {
 
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({
-    hd: "apptension.com",
+    hd: 'apptension.com',
   });
 
-  const validateAccountCheck = () => {
+  const validateAccountCheck = async () => {
     const currentUser = auth.currentUser;
     let profileInfo = {
       totalPoints: 0,
       seasonPoints: 0,
       availablePoints: 0,
       userName: currentUser?.displayName,
-      role: "user",
+      role: 'user',
     };
+    const isUserExist = await getDoc(doc(db, 'users', currentUser!.uid));
 
-    return setDoc(doc(db, "users", currentUser!.uid), profileInfo)
-      .then(() => true)
-      .catch((err) => {
-        return false;
-      });
+    if (!!!isUserExist.data()) {
+      return setDoc(doc(db, 'users', currentUser!.uid), profileInfo)
+        .then(() => true)
+        .catch((err) => {
+          return false;
+        });
+    }
+    return true;
   };
   useEffect(() => {
     if (user) {
-      const origin = /* location.state?.from?.pathname || */ "/";
+      const origin = /* location.state?.from?.pathname || */ '/';
       navigate(origin);
     }
   }, [user]);
@@ -56,11 +54,7 @@ export const SignInComponent = () => {
       const validAccount = await validateAccountCheck();
       if (validAccount) {
       } else {
-        triggerToast(
-          "Please login with @apptension.com domain!",
-          "error",
-          "🛑"
-        );
+        triggerToast('Please login with @apptension.com domain!', 'error', '🛑');
         signOut(auth);
       }
     });
@@ -68,12 +62,7 @@ export const SignInComponent = () => {
 
   return (
     <div className="h-screen flex flex-col justify-center">
-      <FontAwesomeIcon
-        icon={faBolt}
-        color="#83E933"
-        size="5x"
-        className="mb-8"
-      />
+      <FontAwesomeIcon icon={faBolt} color="#83E933" size="5x" className="mb-8" />
       <h1 className="text-center text-6xl mb-36 font-bold">Sparky</h1>
       <button className="btn" onClick={handleGoogleSignIn}>
         Sign in
