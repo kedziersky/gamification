@@ -52,8 +52,7 @@ export const SignInComponent = () => {
   const handleGoogleSignIn = async () => {
     signInWithPopup(auth, provider).then(async () => {
       const validAccount = await validateAccountCheck();
-      if (validAccount) {
-      } else {
+      if (!validAccount) {
         triggerToast('Please login with @apptension.com domain!', 'error', '🛑');
         signOut(auth);
       }

@@ -1,28 +1,21 @@
-import { collection, orderBy, query, where } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { Loader } from "../../../components/loader";
-import { ScreenHeader } from "../../../components/screenHeader";
-import { useCollectionOnce } from "../../../hooks/useCollectionOnce";
-import { db } from "../../../services/firebase";
-import { LeaderboardItem } from "./leaderboardItem";
+import { collection, orderBy, query, where } from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { Loader } from '../../../components/loader';
+import { ScreenHeader } from '../../../components/screenHeader';
+import { useCollectionOnce } from '../../../hooks/useCollectionOnce';
+import { db } from '../../../services/firebase';
+import { LeaderboardItem } from './leaderboardItem';
 
 export const LeaderboardComponent = () => {
-  const usersRef = collection(db, "users");
-  const queryUsers = query(usersRef, orderBy("totalPoints", "desc"));
-  const { value, loading } = useCollectionOnce(queryUsers);
-
+  const usersRef = collection(db, 'users');
+  const queryUsers = query(usersRef, where('role', '==', 'user'), orderBy('totalPoints', 'desc'));
+  const { value, loading, error } = useCollectionOnce(queryUsers);
+  console.log(error);
   if (loading) return <Loader />;
 
   const renderLeaderboard = () => {
     return value?.docs.map((item, index) => {
-      return (
-        <LeaderboardItem
-          item={item.data()}
-          index={index + 1}
-          id={item.id}
-          key={item.id}
-        />
-      );
+      return <LeaderboardItem item={item.data()} index={index + 1} id={item.id} key={item.id} />;
     });
   };
   return (

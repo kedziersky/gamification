@@ -2,6 +2,7 @@ import { collection, orderBy, query, where } from 'firebase/firestore';
 import { isEmpty } from 'ramda';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { EmptyList } from '../../../components/emptyList';
+import { Loader } from '../../../components/loader';
 import { ScreenHeader } from '../../../components/screenHeader';
 import { db } from '../../../services/firebase';
 import { OrdersItem } from './ordersItem';
@@ -14,7 +15,7 @@ export const OrdersComponent = () => {
   );
   const orders = value?.docs;
 
-  if (loading) return <progress className="progress w-56" />;
+  if (loading) return <Loader />;
 
   const renderSubmissions = () => {
     return orders?.map((item, index) => {

@@ -85,7 +85,7 @@ export const AddPrizeComponent = () => {
             {...register('name', { required: true })}
           />
           <label className="label">
-            <span className="label-text">Price</span>
+            <span className="label-text">Volts</span>
           </label>
           <input
             type="number"

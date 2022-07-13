@@ -9,17 +9,19 @@ import { UserOrdersItem } from './userOrdersItem';
 
 export const UserOrdersComponent = () => {
   const { currentUser } = getAuth();
-
+  console.log(currentUser?.uid);
   const ordersRef = collection(db, 'users', `${currentUser!.uid}/orders`);
   const navigate = useNavigate();
 
   const handleNavigation = (id: string) => {
     navigate(`/orders/${id}`);
   };
-  const [value, loading, error] = useCollection(query(ordersRef, orderBy('orderDate', 'desc')));
+  const [value, loading] = useCollection(query(ordersRef, orderBy('createdOnDate', 'desc')));
 
   if (loading) return <Loader />;
+
   if (!value?.docs.length) return <EmptyList text="No orders yet 👀" />;
+
   const renderActivities = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;

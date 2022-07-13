@@ -224,7 +224,11 @@ export const ActivityDetailsComponent = () => {
       <ScreenHeader title="Activity Details" />
       <DetailsItemComponent label="Name" text={activity?.name} />
       <DetailsItemComponent label="Description" text={activity?.description} />
-      <DetailsItemComponent label="Points" text={activity?.points} />
+      <DetailsItemComponent
+        label="Volts"
+        text={activity?.points}
+        icon={<FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />}
+      />
 
       {activity?.submissionLimit && <DetailsItemComponent label="Submission limit" text={activity?.submissionLimit} />}
 
