@@ -218,7 +218,11 @@ export const PrizeDetailsComponent = () => {
       <BackNavigation />
       <ScreenHeader title="Prize details" />
       <DetailsItem label="Name" text={value?.name} />
-      <DetailsItem label="Price" text={value?.price} />
+      <DetailsItem
+        label="Volts"
+        text={value?.price}
+        icon={<FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />}
+      />
       {value?.url && <DetailsItem label="Prize URL" text={value?.url} />}
       {value?.attachment && <DetailsItem label="Photo" attachmentURL={value?.attachment} />}
 

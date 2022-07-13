@@ -40,7 +40,7 @@ export const PrizesComponent = () => {
               <tr>
                 <th></th>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Volts</th>
               </tr>
             </thead>
             <tbody>{renderPrizes()}</tbody>

@@ -89,7 +89,7 @@ export const OrderDetailsComponent = () => {
       <ScreenHeader title="Prize Details" />
       <DetailsItem label="Prize name" text={value?.prizeName} />
       <DetailsItem
-        label="Price"
+        label="Volts"
         text={value?.price}
         icon={<FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />}
       />
