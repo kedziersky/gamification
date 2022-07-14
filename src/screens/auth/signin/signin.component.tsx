@@ -25,11 +25,13 @@ export const SignInComponent = () => {
 
   const validateAccountCheck = async () => {
     const currentUser = auth.currentUser;
+
     let profileInfo = {
       totalPoints: 0,
       seasonPoints: 0,
       availablePoints: 0,
       userName: currentUser?.displayName,
+      email: currentUser?.email,
       role: 'user',
     };
     const isUserExist = await getDoc(doc(db, 'users', currentUser!.uid));
