@@ -119,6 +119,11 @@ export const SubmissionDetailsComponent = () => {
       <ScreenHeader title="Submission Details" />
       <DetailsItem label="Activity name" text={value?.name} />
       <DetailsItem label="Activity description" text={value?.description} />
+      <DetailsItem
+        label="Volts"
+        text={value?.points}
+        icon={<FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />}
+      />
       <DetailsItem label="User" text={value?.userName} />
       <DetailsItem label="Solution" text={value?.solution} />
       {value?.attachment && <DetailsItem label="Attachment" attachmentURL={value?.attachment} />}
