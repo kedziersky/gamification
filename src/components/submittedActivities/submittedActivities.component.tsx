@@ -45,7 +45,6 @@ export const SubmittedActivitiesComponent = () => {
         <table className="table table-zebra w-full">
           <thead>
             <tr>
-              <th></th>
               <th>Activity</th>
               <th>Status</th>
             </tr>

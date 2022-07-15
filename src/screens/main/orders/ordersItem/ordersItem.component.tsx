@@ -10,7 +10,6 @@ export const OrdersItemComponent = ({ item, index, id }: any) => {
 
   return (
     <tr onClick={handleNavigation}>
-      <th>{index}</th>
       <td>{item.prizeName}</td>
       <td>{item.userName}</td>
       <td>{date.toLocaleString()}</td>

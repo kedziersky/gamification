@@ -1,6 +1,6 @@
-import { faBolt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
 export const PrizesItemComponent = ({ item, index, id }: any) => {
   const navigate = useNavigate();
 
@@ -10,7 +10,6 @@ export const PrizesItemComponent = ({ item, index, id }: any) => {
 
   return (
     <tr onClick={handleNavigation}>
-      <th>{index}</th>
       <td>{item.name}</td>
       <td>
         <span className="items-center">

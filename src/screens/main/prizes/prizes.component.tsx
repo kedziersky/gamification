@@ -38,7 +38,6 @@ export const PrizesComponent = () => {
           <table className="table table-zebra w-full">
             <thead>
               <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Volts</th>
               </tr>

@@ -1,15 +1,9 @@
-import { faBolt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const ActivityItemComponent = ({
-  item,
-  index,
-  id,
-  handleClick,
-}: any) => {
+export const ActivityItemComponent = ({ item, handleClick }: any) => {
   return (
     <tr onClick={handleClick}>
-      <th>{index}</th>
       <td>{item.name}</td>
       <td>
         <span className="items-center">

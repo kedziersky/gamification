@@ -32,7 +32,6 @@ export const SubmissionsComponent = () => {
         <table className="table table-zebra w-full">
           <thead>
             <tr>
-              <th></th>
               <th>Activity</th>
               <th>Player</th>
               <th>Submission date</th>

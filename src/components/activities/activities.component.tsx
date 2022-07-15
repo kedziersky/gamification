@@ -22,9 +22,7 @@ export const ActivitiesComponent = () => {
     return value?.docs?.map((item, index) => {
       const id = item.id;
 
-      return (
-        <ActivityItem item={item.data()} index={index + 1} id={id} handleClick={() => handleNavigation(id)} key={id} />
-      );
+      return <ActivityItem item={item.data()} id={id} handleClick={() => handleNavigation(id)} key={id} />;
     });
   };
 
@@ -34,7 +32,6 @@ export const ActivitiesComponent = () => {
         <table className="table table-zebra w-full">
           <thead>
             <tr>
-              <th></th>
               <th>Activity</th>
               <th>Points</th>
             </tr>

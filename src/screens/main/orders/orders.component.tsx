@@ -32,7 +32,6 @@ export const OrdersComponent = () => {
         <table className="table table-zebra w-full">
           <thead>
             <tr>
-              <th></th>
               <th>Prize name</th>
               <th>Player</th>
               <th>Order date</th>
