@@ -10,12 +10,14 @@ export const PrizesItemComponent = ({ item, index, id }: any) => {
 
   return (
     <tr onClick={handleNavigation}>
-      <td>{item.name}</td>
       <td>
-        <span className="items-center">
-          <FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />
-          {item.price}
-        </span>
+        <div>
+          <p className="font-bold overflow-hidden whitespace-nowrap text-ellipsis">{item.name}</p>
+          <span className="flex items-center mt-1">
+            <FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" size="sm" />
+            <p>{item.price}</p>
+          </span>
+        </div>
       </td>
     </tr>
   );

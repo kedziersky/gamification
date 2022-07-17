@@ -40,13 +40,11 @@ export const UserOrdersComponent = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
-        <table className="table table-zebra w-full">
+      <div className="overflow-y-auto h-[calc(100vh-330px)]">
+        <table className="table table-zebra w-full table-fixed">
           <thead>
             <tr>
-              <th></th>
               <th>Prize</th>
-              <th>Status</th>
             </tr>
           </thead>
           <tbody>{renderActivities()}</tbody>

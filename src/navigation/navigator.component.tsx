@@ -1,23 +1,24 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import { Submissions } from "../screens/main/submissions";
-import { ActivityDetails } from "../screens/main/activityDetails";
-import { Home } from "../screens/main/home";
-import { SubmissionDetails } from "../screens/main/submissionDetails";
-import { Prizes } from "../screens/main/prizes";
-import { PrizeDetails } from "../screens/main/prizeDetails";
-import { Orders } from "../screens/main/orders";
-import { Leaderboard } from "../screens/main/leaderboard";
-import { Settings } from "../screens/main/settings";
-import { OrderDetails } from "../screens/main/orderDetails";
+import { Submissions } from '../screens/main/submissions';
+import { ActivityDetails } from '../screens/main/activityDetails';
+import { Home } from '../screens/main/home';
+import { SubmissionDetails } from '../screens/main/submissionDetails';
+import { Prizes } from '../screens/main/prizes';
+import { PrizeDetails } from '../screens/main/prizeDetails';
+import { Orders } from '../screens/main/orders';
+import { Leaderboard } from '../screens/main/leaderboard';
+import { Settings } from '../screens/main/settings';
+import { OrderDetails } from '../screens/main/orderDetails';
 
-import { Add } from "../screens/main/add";
-import { AddActivity } from "../screens/main/add/activity";
-import { AddPrize } from "../screens/main/add/prize";
-import { AuthRoute } from "./authRoute";
-import { UnauthRoute } from "./unauthRoute";
-import { SignIn } from "../screens/auth/signin";
-import { LayoutBottomNavigator } from "../layouts/layoutBottomNavigator";
+import { Add } from '../screens/main/add';
+import { AddActivity } from '../screens/main/add/activity';
+import { AddPrize } from '../screens/main/add/prize';
+import { AuthRoute } from './authRoute';
+import { UnauthRoute } from './unauthRoute';
+import { SignIn } from '../screens/auth/signin';
+import { LayoutBottomNavigator } from '../layouts/layoutBottomNavigator';
+import { SubmissionHistory } from '../screens/main/submissionHistory';
 
 export const NavigatorComponent = () => {
   return (
@@ -158,6 +159,16 @@ export const NavigatorComponent = () => {
           element={
             <LayoutBottomNavigator>
               <AddPrize />
+            </LayoutBottomNavigator>
+          }
+        />
+      </Route>
+      <Route path="/history" element={<AuthRoute />}>
+        <Route
+          path="/history"
+          element={
+            <LayoutBottomNavigator>
+              <SubmissionHistory />
             </LayoutBottomNavigator>
           }
         />

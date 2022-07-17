@@ -68,7 +68,7 @@ export const SubmissionDetailsComponent = () => {
   if (loading) return <Loader />;
 
   const renderViewCondition = () => {
-    if (user?.role === 'admin') {
+    if (user?.role === 'admin' && !value?.reviewer) {
       return (
         <>
           <button className="btn btn-primary w-full mb-5" onClick={handleAccept}>

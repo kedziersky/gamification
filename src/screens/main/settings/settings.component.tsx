@@ -1,6 +1,6 @@
-import { getAuth, signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
-import { useUserContext } from "../../../hooks/useUser";
+import { getAuth, signOut } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../../hooks/useUser';
 
 export const SettingsComponent = () => {
   const auth = getAuth();
@@ -9,26 +9,30 @@ export const SettingsComponent = () => {
   const handleButton = async () => {
     await signOut(auth);
     resetUser();
-    navigate("/signin");
+    navigate('/signin');
   };
 
   const adminOptions = [
     {
-      name: "Leaderboard",
-      url: "/leaderboard",
+      name: 'Submission history',
+      url: '/history',
     },
     {
-      name: "activities",
-      url: "/",
+      name: 'Leaderboard',
+      url: '/leaderboard',
     },
     {
-      name: "prizes",
-      url: "/prizes",
+      name: 'activities',
+      url: '/',
+    },
+    {
+      name: 'prizes',
+      url: '/prizes',
     },
   ];
 
   const renderAdminOptions = () => {
-    if (user?.role === "admin") {
+    if (user?.role === 'admin') {
       return adminOptions.map((item, index) => (
         <Link key={index} to={item.url} className="btn w-full mb-3">
           {item.name}

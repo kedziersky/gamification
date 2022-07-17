@@ -1,17 +1,16 @@
-import { Status } from "../../status";
+import { Status } from '../../status';
 
-export const UserOrdersItemComponent = ({
-  item,
-  index,
-
-  handleClick,
-}: any) => {
+export const UserOrdersItemComponent = ({ item, handleClick }: any) => {
   return (
     <tr onClick={handleClick}>
-      <th>{index}</th>
-      <td>{item.prizeName}</td>
       <td>
-        <Status status={item.status} />
+        <div>
+          <p className="font-bold overflow-hidden whitespace-nowrap text-ellipsis mb-2">{item.prizeName}</p>
+          <span className="flex items-center">
+            <p className="mr-2">Status</p>
+            <Status status={item.status} />
+          </span>
+        </div>
       </td>
     </tr>
   );

@@ -7,12 +7,10 @@ import { ScreenHeader } from '../../../components/screenHeader';
 import { db } from '../../../services/firebase';
 import { SubmissionItem } from './submissionItem';
 
-export const SubmissionsComponent = () => {
+export const SubmissionHistoryComponent = () => {
   const submissionsRef = collection(db, 'submissions');
 
-  const [value, loading, error] = useCollection(
-    query(submissionsRef, where('status', '==', 'pending'), orderBy('createdOnDate', 'desc'))
-  );
+  const [value, loading, error] = useCollection(query(submissionsRef, where('status', '!=', 'pending')));
 
   const submissions = value?.docs;
   if (loading) return <Loader />;
@@ -43,8 +41,8 @@ export const SubmissionsComponent = () => {
 
   return (
     <div>
-      <ScreenHeader title="Submissions" />
-      <p className="mb-5">As an admin you can review and accept or reject the submissions.</p>
+      <ScreenHeader title="Submissions History" />
+      <p className="mb-5">As an admin you can see the submissions history here.</p>
       {renderContainer()}
     </div>
   );

@@ -28,13 +28,11 @@ export const OrdersComponent = () => {
       return <EmptyList text="Currently there are no orders!" />;
     }
     return (
-      <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
-        <table className="table table-zebra w-full">
+      <div className="overflow-y-auto h-[calc(100vh-330px)]">
+        <table className="table table-zebra w-full table-fixed">
           <thead>
             <tr>
-              <th>Prize name</th>
-              <th>Player</th>
-              <th>Order date</th>
+              <th>Prize</th>
             </tr>
           </thead>
           <tbody>{renderSubmissions()}</tbody>

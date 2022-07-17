@@ -21,7 +21,7 @@ export const LeaderboardComponent = () => {
   return (
     <div>
       <ScreenHeader title="Leaderboard" />
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-190px)]">
         <table className="table table-zebra w-full">
           <thead>
             <tr>

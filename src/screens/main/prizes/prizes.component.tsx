@@ -34,12 +34,11 @@ export const PrizesComponent = () => {
     {
       name: 'Available',
       component: (
-        <div className="overflow-x-auto overflow-y-auto h-[calc(100vh-300px)]">
-          <table className="table table-zebra w-full">
+        <div className="overflow-y-auto h-[calc(100vh-330px)]">
+          <table className="table table-zebra w-full table-fixed">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Volts</th>
+                <th>Prize</th>
               </tr>
             </thead>
             <tbody>{renderPrizes()}</tbody>
