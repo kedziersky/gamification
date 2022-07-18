@@ -28,16 +28,16 @@ export const ActivityDetailsComponent = () => {
 
   const [value, loading, error] = useDocument(doc(db, 'activities', id!));
 
-  const submissionsRef = collection(db, 'submissions');
+  const submissionsRef = collection(db, `submissions`);
+  const userSubmissionsRef = collection(db, `users/${user.userId}/submissions`);
   const activity = value?.data();
 
   if (activity?.submissionLimit) {
-    const q = query(submissionsRef, where('activityId', '==', id), where('status', '!=', 'rejected'));
+    const q = query(userSubmissionsRef, where('activityId', '==', id), where('status', '!=', 'rejected'));
 
     const querySnapshot = async () => {
       try {
         const response = await getDocs(q);
-
         setSubmissionLimit(response.docs.length);
       } catch (e) {
         console.log(e);
