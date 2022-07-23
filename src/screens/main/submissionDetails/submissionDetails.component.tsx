@@ -68,7 +68,7 @@ export const SubmissionDetailsComponent = () => {
   if (loading) return <Loader />;
 
   const renderViewCondition = () => {
-    if (user?.role === 'admin' && !value?.reviewer) {
+    if (user?.role === 'admin' && !value?.reviewer && user.userId !== value?.userId) {
       return (
         <>
           <button className="btn btn-primary w-full mb-5" onClick={handleAccept}>
@@ -107,7 +107,7 @@ export const SubmissionDetailsComponent = () => {
         <DetailsItem label="Status" />
         <Status status={value?.status} />
         <div className="mb-3" />
-        <DetailsItem label="Reviewed by" text={value?.reviewer} />
+        {value?.reviewer && <DetailsItem label="Reviewed by" text={value?.reviewer} />}
         <div className="mb-3" />
         {value?.rejectionMessage && <DetailsItem label="Rejection message" text={value?.rejectionMessage} />}
       </>

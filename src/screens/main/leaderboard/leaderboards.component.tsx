@@ -8,7 +8,7 @@ import { LeaderboardItem } from './leaderboardItem';
 
 export const LeaderboardComponent = () => {
   const usersRef = collection(db, 'users');
-  const queryUsers = query(usersRef, where('role', '==', 'user'), orderBy('totalPoints', 'desc'));
+  const queryUsers = query(usersRef, orderBy('totalPoints', 'desc'));
   const { value, loading, error } = useCollectionOnce(queryUsers);
   console.log(error);
   if (loading) return <Loader />;
