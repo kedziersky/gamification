@@ -20,6 +20,9 @@ export const LogsItemComponent = ({ item }: any) => {
             <p>{item.action.value}</p>
           </span>
           <span className="flex items-center">
+            <p>Admin: {item.admin}</p>
+          </span>
+          <span className="flex items-center">
             <FontAwesomeIcon icon={faUser} className="mr-2" size="sm" />
             <p>{item.user.userName}</p>
           </span>
