@@ -29,6 +29,10 @@ export const SettingsComponent = () => {
       name: 'prizes',
       url: '/prizes',
     },
+    {
+      name: 'logs',
+      url: '/logs',
+    },
   ];
 
   const renderAdminOptions = () => {

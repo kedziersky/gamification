@@ -19,6 +19,8 @@ import { UnauthRoute } from './unauthRoute';
 import { SignIn } from '../screens/auth/signin';
 import { LayoutBottomNavigator } from '../layouts/layoutBottomNavigator';
 import { SubmissionHistory } from '../screens/main/submissionHistory';
+import { AddPoints } from '../screens/main/add/points';
+import { Logs } from '../screens/main/logs';
 
 export const NavigatorComponent = () => {
   return (
@@ -163,12 +165,32 @@ export const NavigatorComponent = () => {
           }
         />
       </Route>
+      <Route path="/add/points" element={<AuthRoute />}>
+        <Route
+          path="/add/points"
+          element={
+            <LayoutBottomNavigator>
+              <AddPoints />
+            </LayoutBottomNavigator>
+          }
+        />
+      </Route>
       <Route path="/history" element={<AuthRoute />}>
         <Route
           path="/history"
           element={
             <LayoutBottomNavigator>
               <SubmissionHistory />
+            </LayoutBottomNavigator>
+          }
+        />
+      </Route>
+      <Route path="/logs" element={<AuthRoute />}>
+        <Route
+          path="/logs"
+          element={
+            <LayoutBottomNavigator>
+              <Logs />
             </LayoutBottomNavigator>
           }
         />

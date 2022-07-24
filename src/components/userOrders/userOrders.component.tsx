@@ -9,7 +9,7 @@ import { UserOrdersItem } from './userOrdersItem';
 
 export const UserOrdersComponent = () => {
   const { currentUser } = getAuth();
-  console.log(currentUser?.uid);
+
   const ordersRef = collection(db, 'users', `${currentUser!.uid}/orders`);
   const navigate = useNavigate();
 
