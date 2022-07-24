@@ -19,9 +19,7 @@ export const LogsItemComponent = ({ item }: any) => {
             <FontAwesomeIcon icon={faBolt} color="#83E933" className="mr-2" />
             <p>{item.action.value}</p>
           </span>
-          <span className="flex items-center">
-            <p>Admin: {item.admin}</p>
-          </span>
+
           <span className="flex items-center">
             <FontAwesomeIcon icon={faUser} className="mr-2" size="sm" />
             <p>{item.user.userName}</p>
@@ -29,6 +27,10 @@ export const LogsItemComponent = ({ item }: any) => {
           <span className="flex items-center">
             <FontAwesomeIcon icon={faCalendar} className="mr-2" size="sm" />
             <p>{date.toLocaleString('en', options)}</p>
+          </span>
+
+          <span className="flex items-center mt-2">
+            <p>Admin: {item.admin}</p>
           </span>
         </div>
       </td>
